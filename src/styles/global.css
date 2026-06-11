@@ -1,0 +1,42 @@
+@import '@fontsource/caveat/600.css';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: 'Basier Circle';
+  src: url('/fonts/BasierCircle-Regular.otf') format('opentype');
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Basier Circle';
+  src: url('/fonts/BasierCircle-Bold.otf') format('opentype');
+  font-weight: 700;
+  font-display: swap;
+}
+
+/* Arbeitsraster — nur auf Papier-Flächen, nie auf Karten */
+.raster {
+  background-color: #f7f5f1;
+  background-image:
+    repeating-linear-gradient(0deg, rgba(43, 48, 54, 0.045) 0 1px, transparent 1px 30px),
+    repeating-linear-gradient(90deg, rgba(43, 48, 54, 0.045) 0 1px, transparent 1px 30px);
+}
+
+/* Lesetypografie Feldnotizen — Raster hier bewusst aus (Review-Entscheidung) */
+.prose-notiz { background: #f7f5f1; }
+.prose-notiz p { margin: 0 0 1.15em; font-size: 1.0625rem; line-height: 1.75; color: #2b3036; }
+.prose-notiz strong { font-weight: 700; }
+.prose-notiz a { color: #0e7c85; text-decoration: underline; text-underline-offset: 2px; }
+.prose-notiz blockquote { border-left: 3px solid #14b4be; padding: 0.25rem 0 0.25rem 1.1rem; margin: 0 0 1.15em; font-weight: 700; font-size: 1.15rem; line-height: 1.5; }
+.prose-notiz h2 { font-size: 1.35rem; font-weight: 700; margin: 1.6em 0 0.6em; }
+
+a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid #0e7c85; outline-offset: 2px; }
+
+/* Handspur zeichnet beim Eintritt in den Viewport (Script in BaseLayout) */
+.hsvg path { stroke-dasharray: var(--len, 300); stroke-dashoffset: var(--len, 300); }
+.hsvg.an path { transition: stroke-dashoffset 0.7s ease; stroke-dashoffset: 0; }
+@media (prefers-reduced-motion: reduce) {
+  .hsvg path { stroke-dashoffset: 0 !important; transition: none !important; }
+}

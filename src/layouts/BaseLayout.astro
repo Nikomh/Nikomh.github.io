@@ -1,0 +1,68 @@
+---
+import '../styles/global.css';
+// Vor dem offiziellen Launch (echte Domain + echtes Impressum) auf false setzen:
+const PRELAUNCH = true;
+interface Props { title: string; description: string; }
+const { title, description } = Astro.props;
+const nav = [
+  { href: '/feldnotizen', label: 'Feldnotizen' },
+  { href: '/gebaut', label: 'Gebaut' },
+  { href: '/werkzeuge', label: 'Werkzeugkasten' },
+  { href: '/ueber-mich', label: 'Über mich' },
+];
+---
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    {PRELAUNCH && <meta name="robots" content="noindex" />}
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="alternate" type="application/rss+xml" title="Feldnotizen" href="/rss.xml" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    {/* TODO Tag-1-Pflicht: automatisierte OG-Images (satori/astro-og) + Plausible/Umami einbinden */}
+  </head>
+  <body class="raster min-h-screen font-sans text-tinte">
+    <header class="mx-auto flex max-w-3xl flex-wrap items-center justify-between gap-x-4 gap-y-2 px-5 pb-4 pt-6 sm:px-8">
+      <a href="/" class="text-lg font-bold no-underline">Nikolay<span class="text-tuerkis">.</span></a>
+      <nav class="flex flex-wrap gap-x-4 gap-y-1 text-[13.5px]">
+        {nav.map((n) => <a class="hover:text-lagune hover:underline" href={n.href}>{n.label}</a>)}
+      </nav>
+    </header>
+    <main class="mx-auto max-w-3xl px-5 sm:px-8">
+      <slot />
+    </main>
+    <footer class="mx-auto mt-12 max-w-3xl border-t border-tinte/20 px-5 pb-10 pt-5 text-[12.5px] text-grau sm:px-8">
+      <p>Nikolay · AI Transformation Architect bei <a class="text-lagune hover:underline" href="https://claudia-thonet.de">Claudia Thonet Agile Consulting</a></p>
+      <p class="mt-1">
+        <a class="text-lagune hover:underline" href="https://www.linkedin.com/in/TODO">LinkedIn</a> ·
+        <a class="text-lagune hover:underline" href="/rss.xml">RSS</a> ·
+        <a class="text-lagune hover:underline" href="mailto:TODO@TODO.de">E-Mail</a> ·
+        <a class="text-lagune hover:underline" href="/impressum">Impressum</a> ·
+        <a class="text-lagune hover:underline" href="/datenschutz">Datenschutz</a>
+      </p>
+      <p class="mt-1">Diese Seite misst ohne Cookies — deshalb gibt es hier kein Banner.</p>
+      <p class="mt-2 font-hand text-[17px]">Gebaut mit den Werkzeugen, über die ich hier schreibe.</p>
+    </footer>
+    <script>
+      const obs = new IntersectionObserver(
+        (es) => es.forEach((e) => {
+          if (!e.isIntersecting) return;
+          const svg = e.target as SVGElement;
+          svg.querySelectorAll('path').forEach((p) => {
+            const l = (p as SVGPathElement).getTotalLength();
+            p.style.setProperty('--len', String(l));
+          });
+          requestAnimationFrame(() => svg.classList.add('an'));
+          obs.unobserve(svg);
+        }),
+        { threshold: 0.6 }
+      );
+      document.querySelectorAll('.hsvg').forEach((s) => obs.observe(s));
+    </script>
+  </body>
+</html>

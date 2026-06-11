@@ -1,0 +1,15 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import NotizCard from '../../components/NotizCard.astro';
+import { getCollection } from 'astro:content';
+const notizen = (await getCollection('feldnotizen')).sort((a, b) => +b.data.date - +a.data.date);
+const kategorien = [...new Set(notizen.map((n) => n.data.kategorie))];
+---
+<BaseLayout title="Feldnotizen — Nikolay" description="Beobachtungen aus der Arbeit mit KI und Menschen — szenisch, ehrlich, ohne Folienglanz.">
+  <h1 class="pt-6 text-3xl font-bold">Feldnotizen</h1>
+  <p class="mt-2 max-w-xl leading-relaxed text-grau">Beobachtungen aus der Arbeit mit KI und Menschen — szenisch, ehrlich, ohne Folienglanz. Manche Notizen sind fertig gedacht, manche tragen den Vermerk „im Entstehen". Beides ist Absicht.</p>
+  <p class="mt-3 text-sm text-grau">Themen: {kategorien.join(' · ')}</p>
+  <div class="mt-6 flex flex-col gap-3">
+    {notizen.map((n) => <NotizCard href={`/feldnotizen/${n.slug}`} tag={n.data.kategorie} title={n.data.title} description={n.data.description} datum={n.data.date} />)}
+  </div>
+</BaseLayout>

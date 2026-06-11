@@ -1,0 +1,82 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Handspur from '../components/Handspur.astro';
+import NotizCard from '../components/NotizCard.astro';
+import GebautCard from '../components/GebautCard.astro';
+import { getCollection } from 'astro:content';
+
+const notizen = (await getCollection('feldnotizen')).sort((a, b) => +b.data.date - +a.data.date);
+const [featured, ...rest] = notizen;
+const builds = (await getCollection('gebaut')).sort((a, b) => +b.data.date - +a.data.date);
+---
+<BaseLayout
+  title="Nikolay — Feldnotizen eines AI Transformation Architect"
+  description="Ich baue täglich mit KI und schreibe auf, was wirklich passiert: Feldnotizen, gebaute Lösungen, Werkzeuge — für alle, die KI im Arbeitsalltag verankern wollen."
+>
+  <section class="relative pt-6 sm:pt-10">
+    <svg class="absolute right-0 top-2 hidden sm:block" width="110" height="14" aria-hidden="true">
+      <g stroke="#5c626a" stroke-opacity="0.4" stroke-width="1.2"><line x1="4" y1="7" x2="106" y2="7" /><line x1="4" y1="2" x2="4" y2="12" /><line x1="106" y1="2" x2="106" y2="12" /></g>
+    </svg>
+    <h1 class="max-w-xl text-[1.75rem] font-bold leading-tight sm:text-4xl">
+      Ich baue jeden Tag mit KI — und schreibe auf, was dabei <Handspur>wirklich passiert.</Handspur>
+    </h1>
+    <p class="mt-4 max-w-lg leading-relaxed text-grau">
+      Feldnotizen, gebaute Lösungen und Werkzeuge von jemandem, der Führungskräfte und Teams dahin begleitet,
+      KI selbst in die Hand zu nehmen. Hands-on, human-centric, ohne Hype.
+    </p>
+    <div class="mt-6 flex flex-wrap items-center gap-5">
+      <a href={`/feldnotizen/${featured.slug}`} class="rounded-lg bg-anthrazit px-5 py-3 text-sm font-bold text-papier no-underline hover:bg-tinte">Neueste Feldnotiz lesen</a>
+      <a href="/selbst-check" class="text-sm text-lagune hover:underline">Den Montagmorgen-Check machen →</a>
+    </div>
+  </section>
+
+  <section class="mt-12">
+    <h2 class="text-xl font-bold">Feldnotizen</h2>
+    <p class="mb-4 mt-1 text-sm text-grau">Was ich beim Arbeiten mit KI und Menschen beobachte — aufgeschrieben, bevor es eine Folie wird.</p>
+    <NotizCard featured href={`/feldnotizen/${featured.slug}`} tag={featured.data.kategorie} title={featured.data.title} description={featured.data.description} datum={featured.data.date} />
+    <div class="mt-3 grid gap-3 sm:grid-cols-2">
+      {rest.slice(0, 2).map((n) => <NotizCard href={`/feldnotizen/${n.slug}`} tag={n.data.kategorie} title={n.data.title} datum={n.data.date} />)}
+    </div>
+    <a href="/feldnotizen" class="mt-4 inline-block text-sm text-lagune hover:underline">Alle Feldnotizen →</a>
+  </section>
+
+  <section class="mt-12">
+    <h2 class="text-xl font-bold">Gebaut</h2>
+    <p class="mb-4 mt-1 text-sm text-grau">Sonntags zeige ich, was die Woche entstanden ist — mit dem, was schiefging.</p>
+    <GebautCard href={`/gebaut/${builds[0].slug}`} title={builds[0].data.title} description={builds[0].data.description} datum={builds[0].data.date} status={builds[0].data.status} />
+    <a href="/gebaut" class="mt-4 inline-block text-sm text-lagune hover:underline">Zum Build-Log →</a>
+  </section>
+
+  <section class="mt-12">
+    <div class="flex flex-col items-start gap-5 rounded-[10px] border border-tinte/15 bg-karte p-6 sm:flex-row sm:items-center">
+      <img src="/images/portrait-quadrat.jpg" alt="Porträt von Nikolay" width="96" height="96" class="h-24 w-24 rounded-full object-cover" loading="lazy" onerror="this.style.display='none'" />
+      <div>
+        <p class="font-bold">Ich bin Nikolay — AI Transformation Architect bei Claudia Thonet.</p>
+        <p class="mt-1 max-w-md text-sm leading-relaxed text-grau">Früher Coach und Trainer, heute baue ich täglich mit KI und begleite Führungskräfte und Teams dahin, es selbst zu tun. Mein Ziel: mich überflüssig zu machen.</p>
+        <a href="/ueber-mich" class="mt-2 inline-block text-sm text-lagune hover:underline">Mehr über mich →</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="relative mt-12">
+    <div class="rounded-[10px] border border-tinte/15 bg-karte p-6">
+      <h2 class="text-lg font-bold">Würde KI bei Ihnen den Montag überleben?</h2>
+      <p class="mt-1 max-w-md text-sm leading-relaxed text-grau">Der Montagmorgen-Check: 12 Fragen, 5 Minuten, ehrliches Ergebnis — ohne E-Mail-Schranke. Niemand sieht Ihre Antworten, nicht mal ich.</p>
+      <a href="/selbst-check" data-event="selbstcheck-start" class="mt-4 inline-block rounded-lg bg-anthrazit px-5 py-2.5 text-sm font-bold text-papier no-underline hover:bg-tinte">Ehrlich testen</a>
+    </div>
+    <span class="font-hand absolute -top-3 right-6 rotate-[-4deg] text-xl text-handspur" aria-hidden="true">neu hier!</span>
+  </section>
+
+  <section id="newsletter" class="mt-12">
+    <div class="rounded-xl bg-anthrazit p-7">
+      <h2 class="text-lg font-bold text-papier">Alle zwei Wochen eine Notiz, die es nicht auf LinkedIn gibt.</h2>
+      <p class="mt-1 text-sm text-eisblau">Kein Pitch, versprochen — abbestellen geht mit einem Klick.</p>
+      {/* TODO: form action auf Newsletter-Anbieter (Double-Opt-in) zeigen */}
+      <form class="mt-4 flex flex-col gap-2.5 sm:flex-row" method="post" action="#">
+        <input type="email" required placeholder="ihre@email.de" class="flex-1 rounded-lg border-0 bg-papier px-3.5 py-2.5 text-sm text-tinte" />
+        <button type="submit" class="rounded-lg bg-tuerkis px-5 py-2.5 text-sm font-bold text-[#04342c]">Eintragen</button>
+      </form>
+      <p class="mt-2.5 text-xs text-eisblau/80">Double-Opt-in, kein Tracking-Schnickschnack. Details in der <a href="/datenschutz" class="underline">Datenschutzerklärung</a>.</p>
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,24 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+const tools = [
+  { titel: 'Prompt-Handwerk-Starter', text: 'Die fünf Fehler, die fast alle mit KI machen (ich habe sie alle selbst gemacht) — und zu jedem der Handwerks-Fix, plus zehn Vorlagen-Prompts für echte Büro-Aufgaben.', cta: 'PDF herunterladen — frei', href: '#', hinweis: '' },
+  { titel: 'Checkliste: Schulungspflicht nach Art. 4 EU AI Act', text: 'Wer muss geschult werden, was muss eine Schulung leisten, wie weisen Sie sie nach — sachlich erklärt, ohne Bußgeld-Panik. Plus: sieben Fragen, an denen Sie ein gutes KI-Training von einem Pflicht-Webinar unterscheiden.', cta: 'Per E-Mail erhalten', href: '#', hinweis: 'Double-Opt-in, jederzeit abbestellbar' },
+  { titel: 'Die Fairness-Deal-Vorlage', text: 'Was passiert mit der Zeit, die KI freispielt? Ein Gesprächsleitfaden plus eine Ein-Seiten-Vereinbarung zum Anpassen.', cta: 'Herunterladen — frei', href: '#', hinweis: '' },
+];
+---
+<BaseLayout title="Werkzeugkasten — Nikolay" description="Vorlagen und Materialien aus meiner Arbeit — frei zum Mitnehmen.">
+  <h1 class="pt-6 text-3xl font-bold">Werkzeugkasten</h1>
+  <p class="mt-2 max-w-xl leading-relaxed text-grau">Vorlagen und Materialien aus meiner Arbeit — nehmen Sie sich, was Sie brauchen. Das meiste ist frei; bei einzelnen Materialien bitte ich um Ihre E-Mail-Adresse, dann bekommen Sie auch Updates dazu.</p>
+  <div class="mt-6 flex flex-col gap-3">
+    {tools.map((t) => (
+      <div class="rounded-[10px] border border-tinte/15 bg-karte p-6">
+        <h2 class="text-lg font-bold">{t.titel}</h2>
+        <p class="mt-1 max-w-xl text-sm leading-relaxed text-grau">{t.text}</p>
+        <a href={t.href} class="mt-3 inline-block text-sm font-bold text-lagune hover:underline">{t.cta} →</a>
+        {t.hinweis && <span class="ml-2 text-xs text-grau">({t.hinweis})</span>}
+      </div>
+    ))}
+  </div>
+  <p class="font-hand mt-6 rotate-[-2deg] text-xl text-handspur" aria-hidden="true">Alle Materialien dürfen geteilt werden. Gern mit Quelle.</p>
+  {/* TODO: PDFs produzieren und href setzen */}
+</BaseLayout>

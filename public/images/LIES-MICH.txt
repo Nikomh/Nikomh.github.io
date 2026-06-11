@@ -1,0 +1,5 @@
+Hier die drei Fotos ablegen (Dateinamen exakt so):
+  portrait-quadrat.jpg  -> das quadratische Porträt (Startseite, Über-mich-Teaser)
+  portrait-gross.jpg    -> das große Porträt vor Graffiti (Über-mich-Seite)
+  gespraech.jpg         -> das Foto im Gespräch/lachend (Über-mich-Seite, zweites Bild)
+Empfehlung: auf max. 1600px Breite verkleinern, als .jpg ~80% Qualität.

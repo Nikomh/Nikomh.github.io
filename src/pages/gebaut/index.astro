@@ -1,0 +1,14 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import GebautCard from '../../components/GebautCard.astro';
+import { getCollection } from 'astro:content';
+const builds = (await getCollection('gebaut')).sort((a, b) => +b.data.date - +a.data.date);
+---
+<BaseLayout title="Gebaut — Nikolay" description="Das Build-Log: Workflows, KI-Projekte, Agenten und kleine Werkzeuge — mit dem, was ich dabei gelernt habe.">
+  <h1 class="pt-6 text-3xl font-bold">Gebaut</h1>
+  <p class="mt-2 max-w-xl leading-relaxed text-grau">Das Build-Log: Was bei mir konkret entsteht — Workflows, KI-Projekte, Agenten, kleine Werkzeuge. Jeder Eintrag mit dem, was es löst, und dem, was ich dabei gelernt habe. Auch die Fehlschläge, die gehören dazu.</p>
+  <p class="mt-2 text-sm text-grau">Neue Einträge meist sonntags.</p>
+  <div class="mt-6 flex flex-col gap-3">
+    {builds.map((b) => <GebautCard href={`/gebaut/${b.slug}`} title={b.data.title} description={b.data.description} datum={b.data.date} status={b.data.status} />)}
+  </div>
+</BaseLayout>

@@ -1,0 +1,240 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Handspur from '../components/Handspur.astro';
+// Der Montagmorgen-Check — Insel-Komponente (einzige Seite mit nennenswertem JS).
+// Antworten werden NUR im Browser ausgewertet, nichts verlässt das Gerät (DSGVO by design).
+---
+<BaseLayout
+  title="Der Montagmorgen-Check — Würde KI bei Ihnen den Montag überleben?"
+  description="12 Fragen, 5 Minuten, ehrliches Ergebnis — ohne E-Mail-Schranke. Selbst-Check entlang der drei Hebel: Motivation, Können, Umfeld."
+>
+  <!-- Schritt 0: Intro -->
+  <section id="mc-intro" class="pt-6 sm:pt-10">
+    <p class="text-xs font-bold uppercase tracking-wide text-lagune">Der Montagmorgen-Check</p>
+    <h1 class="mt-2 max-w-xl text-[1.75rem] font-bold leading-tight sm:text-3xl">
+      Würde KI bei Ihnen den <Handspur>Montag überleben?</Handspur>
+    </h1>
+    <p class="mt-4 max-w-lg leading-relaxed text-grau">
+      Im Workshop funktioniert KI immer. Die Wahrheit zeigt sich am Montagmorgen danach — wenn der Alltag zurück ist.
+      Dieser Check prüft die drei Hebel, an denen es wirklich hängt: <strong class="text-tinte">Motivation, Können, Umfeld.</strong>
+    </p>
+    <p class="mt-3 max-w-lg text-sm leading-relaxed text-grau">
+      12 Fragen, etwa 5 Minuten. Niemand sieht Ihre Antworten — nicht mal ich:
+      Die Auswertung passiert komplett in Ihrem Browser, es wird nichts gespeichert oder gesendet.
+    </p>
+    <button id="mc-start" class="mt-6 rounded-lg bg-anthrazit px-5 py-3 text-sm font-bold text-papier hover:bg-tinte">
+      Ehrlich testen
+    </button>
+  </section>
+
+  <!-- Schritt 1–12: Fragen -->
+  <section id="mc-frage" class="hidden pt-6 sm:pt-10" aria-live="polite">
+    <div class="flex items-center justify-between">
+      <p class="text-xs font-bold uppercase tracking-wide text-lagune">Frage <span id="mc-num">1</span> von 12</p>
+      <div id="mc-raster" class="flex gap-1" aria-hidden="true">
+        {Array.from({ length: 12 }).map(() => (
+          <span class="mc-zelle h-2.5 w-2.5 rounded-[2px] border border-tinte/25 transition-colors"></span>
+        ))}
+      </div>
+    </div>
+    <h2 id="mc-text" class="mt-5 min-h-[5.5rem] max-w-xl text-xl font-bold leading-snug sm:text-2xl"></h2>
+    <div class="mt-6 flex max-w-md flex-col gap-2.5">
+      <button data-wert="3" class="mc-antwort rounded-[10px] border border-tinte/20 bg-karte px-5 py-3 text-left text-sm font-bold hover:border-lagune hover:text-lagune">Trifft zu</button>
+      <button data-wert="2" class="mc-antwort rounded-[10px] border border-tinte/20 bg-karte px-5 py-3 text-left text-sm hover:border-lagune hover:text-lagune">Eher ja</button>
+      <button data-wert="1" class="mc-antwort rounded-[10px] border border-tinte/20 bg-karte px-5 py-3 text-left text-sm hover:border-lagune hover:text-lagune">Eher nein</button>
+      <button data-wert="0" class="mc-antwort rounded-[10px] border border-tinte/20 bg-karte px-5 py-3 text-left text-sm font-bold hover:border-lagune hover:text-lagune">Trifft nicht zu</button>
+    </div>
+    <button id="mc-zurueck" class="mt-5 text-sm text-grau hover:text-lagune hover:underline">← Zurück</button>
+  </section>
+
+  <!-- Ergebnis -->
+  <section id="mc-ergebnis" class="hidden pt-6 sm:pt-10" aria-live="polite">
+    <p class="text-xs font-bold uppercase tracking-wide text-lagune">Ihr Ergebnis</p>
+    <h2 id="mc-urteil" class="mt-2 max-w-xl text-[1.6rem] font-bold leading-tight sm:text-3xl"></h2>
+    <p id="mc-urteil-sub" class="mt-3 max-w-lg leading-relaxed text-grau"></p>
+
+    <div id="mc-profil" class="mt-8 flex max-w-xl flex-col gap-5"></div>
+
+    <div id="mc-klartext" class="mt-10 flex max-w-xl flex-col gap-4"></div>
+
+    <div class="mt-10 max-w-xl rounded-[10px] border border-tinte/15 bg-karte p-6">
+      <p class="text-sm leading-relaxed text-grau">
+        Weiterlesen zum Thema: <a href="/feldnotizen/drei-hebel" class="text-lagune underline">Die drei Hebel</a> ·
+        Die Fairness-Deal-Vorlage liegt im <a href="/werkzeuge" class="text-lagune underline">Werkzeugkasten</a>.
+        Und alle zwei Wochen gibt es <a href="/#newsletter" class="text-lagune underline">eine Notiz per E-Mail</a> — kein Pitch, versprochen.
+      </p>
+    </div>
+    <button id="mc-neu" class="mt-6 text-sm text-grau hover:text-lagune hover:underline">Check neu starten</button>
+  </section>
+
+  <script>
+    type Hebel = 'motivation' | 'koennen' | 'umfeld';
+    const FRAGEN: { hebel: Hebel; text: string }[] = [
+      { hebel: 'motivation', text: 'Ihre Leute haben schon mal von sich aus einen KI-Anwendungsfall vorgeschlagen.' },
+      { hebel: 'koennen', text: 'Es gibt Menschen im Haus, die anderen Prompten beibringen können.' },
+      { hebel: 'umfeld', text: 'Jemand darf 30 Minuten „verschwenden", um einen Workflow zu verbessern — ohne sich zu rechtfertigen.' },
+      { hebel: 'motivation', text: 'Bei Ihnen wird KI eher als Chance denn als Kontrolle erzählt.' },
+      { hebel: 'koennen', text: 'Ihre Leute wissen, was sie eingeben dürfen — und was nicht.' },
+      { hebel: 'umfeld', text: 'Es ist klar geregelt, was mit der Zeit passiert, die durch KI gewonnen wird.' },
+      { hebel: 'motivation', text: 'Wer mit KI Zeit gewinnt, erzählt das offen weiter — statt es lieber für sich zu behalten.' },
+      { hebel: 'koennen', text: 'Wer ein unbrauchbares Ergebnis bekommt, verbessert die Eingabe — statt aufzugeben.' },
+      { hebel: 'umfeld', text: 'Wer einen Fehlversuch mit KI zeigt, erntet Interesse — keine Häme.' },
+      { hebel: 'motivation', text: 'Es gibt mindestens eine Person, deren KI-Begeisterung ansteckt — und der zugehört wird.' },
+      { hebel: 'koennen', text: 'KI wird bei Ihnen für echte Arbeitsaufgaben genutzt, nicht nur zum Glätten von Texten.' },
+      { hebel: 'umfeld', text: 'Es ist klar, wen man fragt, wenn man mit KI nicht weiterkommt.' },
+    ];
+
+    const HEBEL_INFO: Record<Hebel, {
+      name: string;
+      klartext: [string, string, string]; // niedrig / mittel / hoch
+      massnahme: string;
+      schwach: string;
+    }> = {
+      motivation: {
+        name: 'Motivation',
+        klartext: [
+          'KI ist bei Ihnen ein Pflichtprogramm — etwas, das von oben kommt. Solange das so bleibt, hilft kein Tool und keine Schulung. Die gute Nachricht: Motivation entsteht schnell, sobald jemand spürbar Zeit zurückbekommt.',
+          'Es gibt Funken, aber noch kein Feuer: KI wird mitgemacht, nicht gewollt. Meist fehlt keine Überzeugungsarbeit, sondern ein erster Anwendungsfall, der ein echtes Ärgernis löst.',
+          'Ihre Leute wollen — die beste Ausgangslage, die es gibt. Achten Sie darauf, dass es so bleibt: Nichts tötet Motivation schneller als Vorschläge, die im Sande verlaufen.',
+        ],
+        massnahme: 'Fragen Sie im nächsten Teammeeting nicht „Wer nutzt schon KI?", sondern: „Was nervt Sie an Ihrer Woche am meisten?" Daraus wird der erste Anwendungsfall.',
+        schwach: 'Ohne Wollen läuft nichts — aber Motivation ist der Hebel, der sich am schnellsten bewegt, sobald jemand spürbar Zeit zurückbekommt.',
+      },
+      koennen: {
+        name: 'Können',
+        klartext: [
+          'Ihre Leute sind mit dem Werkzeug allein. Ohne Grundhandwerk bleibt KI ein Spielzeug, das nach zwei Wochen langweilt — oder ein Risiko, weil niemand weiß, was eingegeben werden darf.',
+          'Einzelne können es, die meisten probieren herum. Das ist die Phase, in der Frust entsteht: „Bei mir kommt nur Müll raus." Es fehlt kein Talent, sondern Handwerk — und das ist lernbar.',
+          'Das Handwerk sitzt. Jetzt lohnt der nächste Schritt: vom einzelnen Prompt zu Workflows, die von allein laufen — und zu Leuten, die ihr Wissen im Haus weitergeben.',
+        ],
+        massnahme: 'Eine Stunde, ein echtes Arbeitsbeispiel, gemeinsam prompten — nicht vorführen, machen lassen. Wer einmal selbst ein brauchbares Ergebnis erzeugt hat, kommt wieder.',
+        schwach: 'Können ist der sichtbarste Hebel — und der dankbarste: Handwerk lässt sich lernen, an einem Vormittag mehr als in zehn Webinaren.',
+      },
+      umfeld: {
+        name: 'Umfeld',
+        klartext: [
+          'Ihr Umfeld arbeitet gegen die KI — der häufigste und zugleich unsichtbarste Befund. Wenn gewonnene Zeit sofort mit neuen Aufgaben gefüllt wird und Ausprobieren als Drückebergerei gilt, wandert die Nutzung in den Schatten.',
+          'Gewollt ist es, geregelt ist es nicht: Ob jemand experimentieren darf, hängt von der Tagesform ab. Genau diese Unklarheit sorgt dafür, dass Leute lieber gar nichts tun — oder es heimlich tun.',
+          'Ihr Umfeld trägt: Zeit zum Ausprobieren ist legitim, Fehler sind Material, Zuständigkeiten sind klar. Das ist seltener, als Sie denken — pflegen Sie es.',
+        ],
+        massnahme: 'Vereinbaren Sie den Fairness-Deal: eine Seite, die regelt, was mit der Zeit passiert, die KI freispielt. Die Vorlage liegt im Werkzeugkasten.',
+        schwach: 'Das Umfeld ist der unsichtbarste Hebel — er entscheidet nach dem Workshop, nicht darin. Hier anzufangen wirkt am längsten.',
+      },
+    };
+
+    const intro = document.getElementById('mc-intro')!;
+    const frage = document.getElementById('mc-frage')!;
+    const ergebnis = document.getElementById('mc-ergebnis')!;
+    const antworten: number[] = [];
+    let i = 0;
+
+    function zeigeFrage() {
+      document.getElementById('mc-num')!.textContent = String(i + 1);
+      document.getElementById('mc-text')!.textContent = FRAGEN[i].text;
+      document.querySelectorAll('.mc-zelle').forEach((z, n) => {
+        z.classList.toggle('bg-tuerkis', n < i);
+        z.classList.toggle('border-tuerkis', n < i);
+      });
+      (document.getElementById('mc-zurueck') as HTMLElement).style.visibility = i === 0 ? 'hidden' : 'visible';
+      frage.querySelector('h2')!.focus?.();
+    }
+
+    document.getElementById('mc-start')!.addEventListener('click', () => {
+      intro.classList.add('hidden');
+      frage.classList.remove('hidden');
+      zeigeFrage();
+      frage.scrollIntoView({ block: 'start' });
+    });
+
+    document.querySelectorAll('.mc-antwort').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        antworten[i] = Number((btn as HTMLElement).dataset.wert);
+        if (i < FRAGEN.length - 1) { i++; zeigeFrage(); } else { zeigeErgebnis(); }
+      });
+    });
+
+    document.getElementById('mc-zurueck')!.addEventListener('click', () => {
+      if (i > 0) { i--; zeigeFrage(); }
+    });
+
+    document.getElementById('mc-neu')!.addEventListener('click', () => {
+      antworten.length = 0; i = 0;
+      ergebnis.classList.add('hidden');
+      intro.classList.remove('hidden');
+      window.scrollTo({ top: 0 });
+    });
+
+    function band(punkte: number) { return punkte <= 4 ? 0 : punkte <= 8 ? 1 : 2; }
+
+    function zeigeErgebnis() {
+      frage.classList.add('hidden');
+      ergebnis.classList.remove('hidden');
+      window.scrollTo({ top: 0 });
+
+      const score: Record<Hebel, number> = { motivation: 0, koennen: 0, umfeld: 0 };
+      FRAGEN.forEach((f, n) => { score[f.hebel] += antworten[n] ?? 0; });
+      const gesamt = score.motivation + score.koennen + score.umfeld;
+      const reihenfolge: Hebel[] = ['motivation', 'koennen', 'umfeld'];
+      // Bei Gleichstand gewinnt das Umfeld als Startpunkt — es ist der unsichtbarste Hebel.
+      const schwaechster = [...reihenfolge].reverse().reduce((min, h) => (score[h] <= score[min] ? h : min), 'umfeld' as Hebel);
+
+      const urteil = document.getElementById('mc-urteil')!;
+      const sub = document.getElementById('mc-urteil-sub')!;
+      if (gesamt >= 27) {
+        urteil.textContent = 'Ja — KI überlebt Ihren Montagmorgen vermutlich.';
+        sub.textContent = 'Alle drei Hebel tragen. Was jetzt zählt, ist Dranbleiben: Das Profil unten zeigt, wo noch Luft ist.';
+      } else if (gesamt >= 15) {
+        urteil.textContent = 'Knapp. Am Montagmorgen wird es eng.';
+        sub.textContent = 'Es bewegt sich etwas, aber mindestens ein Hebel klemmt — und ein klemmender Hebel reicht, damit der Alltag gewinnt. Unten steht, wo Sie anfangen.';
+      } else {
+        urteil.textContent = 'Ehrliche Antwort: Nein, noch nicht.';
+        sub.textContent = 'Im Workshop würde es funktionieren — am Montag danach nicht. Das ist kein Urteil über Ihre Leute, sondern über die Bedingungen. Und die lassen sich ändern, Hebel für Hebel.';
+      }
+
+      const profil = document.getElementById('mc-profil')!;
+      profil.innerHTML = '';
+      reihenfolge.forEach((h) => {
+        const info = HEBEL_INFO[h];
+        const pct = Math.round((score[h] / 12) * 100);
+        const zeile = document.createElement('div');
+        zeile.className = 'relative';
+        zeile.innerHTML =
+          `<div class="flex items-baseline justify-between">
+             <span class="text-sm font-bold">${info.name}</span>
+             <span class="text-xs text-grau">${score[h]} von 12</span>
+           </div>
+           <div class="mt-1.5 h-3.5 rounded-full border border-tinte/15 bg-karte">
+             <div class="mc-balken h-full rounded-full bg-tuerkis" style="width:0%" data-pct="${pct}"></div>
+           </div>` +
+          (h === schwaechster
+            ? `<span class="font-hand absolute -right-1 -top-6 rotate-[-3deg] text-lg text-handspur" aria-hidden="true">hier anfangen!</span>`
+            : '');
+        profil.appendChild(zeile);
+      });
+      const reduziert = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      requestAnimationFrame(() => {
+        document.querySelectorAll<HTMLElement>('.mc-balken').forEach((b) => {
+          if (!reduziert) b.style.transition = 'width 0.8s ease';
+          b.style.width = `${b.dataset.pct}%`;
+        });
+      });
+
+      const klartext = document.getElementById('mc-klartext')!;
+      klartext.innerHTML = '';
+      const sortiert = [...reihenfolge].sort((a, b) => score[a] - score[b] || (a === schwaechster ? -1 : 0));
+      sortiert.forEach((h) => {
+        const info = HEBEL_INFO[h];
+        const block = document.createElement('div');
+        block.className = h === schwaechster
+          ? 'rounded-[10px] border-[1.5px] border-tinte/30 bg-karte p-6'
+          : 'rounded-[10px] border border-tinte/15 bg-karte p-6';
+        block.innerHTML =
+          `<h3 class="font-bold">${info.name}${h === schwaechster ? ' — Ihr schwächster Hebel' : ''}</h3>` +
+          (h === schwaechster ? `<p class="mt-1 text-sm leading-relaxed text-grau">${info.schwach}</p>` : '') +
+          `<p class="mt-2 text-sm leading-relaxed">${HEBEL_INFO[h].klartext[band(score[h])]}</p>
+           <p class="mt-3 text-sm leading-relaxed"><strong>Erster Schritt:</strong> ${info.massnahme}</p>`;
+        klartext.appendChild(block);
+      });
+    }
+  </script>
+</BaseLayout>

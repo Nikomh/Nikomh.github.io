@@ -1,0 +1,22 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const builds = await getCollection('gebaut');
+  return builds.map((b) => ({ params: { slug: b.slug }, props: { b } }));
+}
+const { b } = Astro.props;
+const { Content } = await b.render();
+const d = b.data.date.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' });
+---
+<BaseLayout title={`${b.data.title} — Gebaut`} description={b.data.description}>
+  <article class="mx-auto max-w-prose pt-6">
+    <p class="text-xs font-bold uppercase tracking-wide text-grau">{b.data.status} · Notiert am {d}</p>
+    <h1 class="mt-3 text-[1.9rem] font-bold leading-tight sm:text-4xl">{b.data.title}</h1>
+    <div class="prose-notiz mt-8"><Content /></div>
+    {b.data.gelernt && (
+      <p class="font-hand mt-8 rotate-[-1deg] text-2xl text-handspur" aria-hidden="true">{b.data.gelernt}</p>
+    )}
+  </article>
+</BaseLayout>

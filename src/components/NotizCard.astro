@@ -1,0 +1,11 @@
+---
+interface Props { href: string; tag: string; title: string; description?: string; datum: Date; featured?: boolean; }
+const { href, tag, title, description, datum, featured = false } = Astro.props;
+const d = datum.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' });
+---
+<a href={href} class={`group block rounded-[10px] border border-tinte/15 bg-karte transition-colors hover:border-lagune ${featured ? 'p-6' : 'p-5'}`}>
+  <span class="text-[11.5px] font-bold uppercase tracking-wide text-lagune">{featured && 'Neu · '}{tag}</span>
+  <p class={`mt-1 font-bold leading-snug group-hover:underline ${featured ? 'text-[1.35rem] max-w-xl' : 'text-[1.05rem]'}`}>{title}</p>
+  {description && <p class="mt-1 max-w-xl text-sm leading-relaxed text-grau">{description}</p>}
+  <p class="mt-2 text-xs text-grau">Notiert am {d}</p>
+</a>
