@@ -4,6 +4,7 @@ description: "Vom Erstgespräch zum entscheiderlesbaren Angebot in einem Bruchte
 date: 2026-06-28
 status: "läuft produktiv"
 gelernt: "Die Qualität steckt nicht im Prompt, sondern im mitgegebenen Material."
+screenshot: "/images/gebaut-baubefund.jpg"
 ---
 
 **Was gebaut wurde:** Ein Claude-Projekt, durch das bei uns inzwischen jedes Angebot läuft. Es kennt unsere Angebotsstruktur (Ausgangslage → Einordnung → Vorgehen → Erfolgskriterien → Investition), unsere Sprache und unsere Qualitätsregeln — zum Beispiel, dass die Ausgangslage den Kunden wörtlich spiegeln muss und jedes Begleitangebot ein definiertes Ende mit Übergabekriterien braucht.

@@ -20,6 +20,7 @@ const gebaut = defineCollection({
     date: z.coerce.date(),
     status: z.string().default('läuft produktiv'),
     gelernt: z.string().optional(),
+    screenshot: z.string().optional(),
   }),
 });
 
