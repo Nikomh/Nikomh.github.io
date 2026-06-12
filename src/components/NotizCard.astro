@@ -2,10 +2,59 @@
 interface Props { href: string; tag: string; title: string; description?: string; datum: Date; featured?: boolean; }
 const { href, tag, title, description, datum, featured = false } = Astro.props;
 const d = datum.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' });
+
+// Kategorie → Akzentfarbe (linker Rand)
+const katColor: Record<string, string> = {
+  'Selbst gestalten': '#14b4be',
+  'Die drei Hebel':   '#0e7c85',
+  'Ohne mich weiter': '#333a45',
+  'Gebaut':           '#2b3036',
+};
+const akzent = katColor[tag] ?? '#14b4be';
+
+// Kategorie → kleines SVG-Icon (inline, 18×18)
+const icons: Record<string, string> = {
+  'Selbst gestalten': `<svg viewBox="0 0 18 18" width="18" height="18" fill="none" aria-hidden="true">
+    <path d="M12 3 L15 6 L6 15 L3 15.5 L3.5 12.5 Z" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M10.5 4.5 L13.5 7.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+  </svg>`,
+  'Die drei Hebel': `<svg viewBox="0 0 18 18" width="18" height="18" fill="none" aria-hidden="true">
+    <line x1="2" y1="4.5" x2="16" y2="4.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+    <circle cx="8" cy="4.5" r="2.2" fill="currentColor"/>
+    <line x1="2" y1="9" x2="16" y2="9" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+    <circle cx="11" cy="9" r="2.2" fill="currentColor"/>
+    <line x1="2" y1="13.5" x2="16" y2="13.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+    <circle cx="6" cy="13.5" r="2.2" fill="currentColor"/>
+  </svg>`,
+  'Ohne mich weiter': `<svg viewBox="0 0 18 18" width="18" height="18" fill="none" aria-hidden="true">
+    <path d="M3 9 L13 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+    <path d="M10 6 L13 9 L10 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="15" cy="5" r="1.8" fill="currentColor"/>
+  </svg>`,
+  'Gebaut': `<svg viewBox="0 0 18 18" width="18" height="18" fill="none" aria-hidden="true">
+    <path d="M13 2.5 C14.5 2.5 16 3.8 16 5.5 C16 7 14.6 8 13.2 8.4 L5.5 16 C4.5 17 3 16 4 15 L11.6 7.4 C11.2 6 12 2.5 13 2.5Z" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+    <line x1="2" y1="15" x2="4.5" y2="12.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+  </svg>`,
+};
+const iconSvg = icons[tag] ?? `<svg viewBox="0 0 18 18" width="18" height="18" fill="none" aria-hidden="true">
+  <circle cx="9" cy="9" r="6" stroke="currentColor" stroke-width="1.4"/>
+  <circle cx="9" cy="9" r="2" fill="currentColor"/>
+</svg>`;
 ---
-<a href={href} class={`group block rounded-[10px] border border-tinte/15 bg-karte transition-colors hover:border-lagune ${featured ? 'p-6' : 'p-5'}`}>
-  <span class="text-[11.5px] font-bold uppercase tracking-wide text-lagune">{featured && 'Neu · '}{tag}</span>
-  <p class={`mt-1 font-bold leading-snug group-hover:underline ${featured ? 'text-[1.35rem] max-w-xl' : 'text-[1.05rem]'}`}>{title}</p>
-  {description && <p class="mt-1 max-w-xl text-sm leading-relaxed text-grau">{description}</p>}
-  <p class="mt-2 text-xs text-grau">Notiert am {d}</p>
+<a
+  href={href}
+  class={`group relative block overflow-hidden rounded-[10px] border border-tinte/15 bg-karte transition-colors hover:border-lagune ${featured ? 'p-6' : 'p-5'}`}
+>
+  <!-- Farbiger Linksrand (Kategorie-Akzent) -->
+  <span class="absolute inset-y-0 left-0 w-[3px] rounded-l-[10px]" style={`background:${akzent}`} aria-hidden="true"></span>
+
+  <!-- Tag + Icon -->
+  <span class="flex items-center gap-1.5 pl-1">
+    <span class="text-lagune" set:html={iconSvg}></span>
+    <span class="text-[11.5px] font-bold uppercase tracking-wide text-lagune">{featured && 'Neu · '}{tag}</span>
+  </span>
+
+  <p class={`mt-1.5 pl-1 font-bold leading-snug group-hover:underline ${featured ? 'text-[1.35rem] max-w-xl' : 'text-[1.05rem]'}`}>{title}</p>
+  {description && <p class="mt-1 max-w-xl pl-1 text-sm leading-relaxed text-grau">{description}</p>}
+  <p class="mt-2 pl-1 text-xs text-grau">Notiert am {d}</p>
 </a>

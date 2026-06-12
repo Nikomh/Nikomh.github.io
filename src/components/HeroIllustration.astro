@@ -1,0 +1,148 @@
+---
+// Notebook-Illustration für den Hero — mobile hidden, desktop visible
+// Viewbox 280×220, konzentriert auf das "offene Notizbuch"-Konzept
+---
+<svg
+  class="hidden sm:block"
+  viewBox="0 0 280 220"
+  width="280"
+  height="220"
+  xmlns="http://www.w3.org/2000/svg"
+  aria-hidden="true"
+>
+  <!-- Boden-Schatten -->
+  <ellipse cx="140" cy="218" rx="118" ry="5" fill="#2b3036" fill-opacity="0.06"/>
+
+  <!-- Linke Seite -->
+  <rect x="5" y="5" width="126" height="206" rx="3" fill="#fbfaf7" stroke="#2b3036" stroke-opacity="0.11" stroke-width="0.8"/>
+
+  <!-- Rotes Randlineal (Notizbuch-typisch) -->
+  <line x1="26" y1="7" x2="26" y2="209" stroke="#fc551e" stroke-width="0.9" stroke-opacity="0.35"/>
+
+  <!-- Lineatur links -->
+  <g stroke="#2b3036" stroke-opacity="0.065" stroke-width="0.55">
+    <line x1="5" y1="38" x2="131" y2="38"/>
+    <line x1="5" y1="54" x2="131" y2="54"/>
+    <line x1="5" y1="70" x2="131" y2="70"/>
+    <line x1="5" y1="86" x2="131" y2="86"/>
+    <line x1="5" y1="102" x2="131" y2="102"/>
+    <line x1="5" y1="118" x2="131" y2="118"/>
+    <line x1="5" y1="134" x2="131" y2="134"/>
+    <line x1="5" y1="150" x2="131" y2="150"/>
+    <line x1="5" y1="166" x2="131" y2="166"/>
+    <line x1="5" y1="182" x2="131" y2="182"/>
+    <line x1="5" y1="198" x2="131" y2="198"/>
+  </g>
+
+  <!-- Linke Seite: Inhalt -->
+  <!-- Überschrift (dicker Block) -->
+  <rect x="33" y="14" width="86" height="10" rx="2.5" fill="#2b3036" fill-opacity="0.7"/>
+
+  <!-- Fließtext-Zeilen -->
+  <rect x="33" y="42" width="92" height="6" rx="2" fill="#2b3036" fill-opacity="0.2"/>
+  <rect x="33" y="58" width="82" height="6" rx="2" fill="#2b3036" fill-opacity="0.2"/>
+  <rect x="33" y="74" width="90" height="6" rx="2" fill="#2b3036" fill-opacity="0.2"/>
+
+  <!-- Handspur-Unterstreichung -->
+  <rect x="33" y="81" width="58" height="2.5" rx="1" fill="#fc551e" fill-opacity="0.65"/>
+
+  <!-- Weiterer Text -->
+  <rect x="33" y="90" width="70" height="6" rx="2" fill="#2b3036" fill-opacity="0.14"/>
+  <rect x="33" y="106" width="95" height="6" rx="2" fill="#2b3036" fill-opacity="0.14"/>
+
+  <!-- Drei Hebel — Pill-Tags -->
+  <rect x="33" y="120" width="32" height="13" rx="6.5" fill="#14b4be" fill-opacity="0.13" stroke="#14b4be" stroke-width="0.9" stroke-opacity="0.5"/>
+  <rect x="39" y="124.5" width="20" height="4" rx="1.5" fill="#14b4be" fill-opacity="0.6"/>
+
+  <rect x="70" y="120" width="30" height="13" rx="6.5" fill="#14b4be" fill-opacity="0.13" stroke="#14b4be" stroke-width="0.9" stroke-opacity="0.5"/>
+  <rect x="75" y="124.5" width="19" height="4" rx="1.5" fill="#14b4be" fill-opacity="0.6"/>
+
+  <rect x="105" y="120" width="26" height="13" rx="6.5" fill="#14b4be" fill-opacity="0.13" stroke="#14b4be" stroke-width="0.9" stroke-opacity="0.5"/>
+  <rect x="110" y="124.5" width="16" height="4" rx="1.5" fill="#14b4be" fill-opacity="0.6"/>
+
+  <!-- Weitere Text-Zeilen -->
+  <rect x="33" y="138" width="78" height="6" rx="2" fill="#2b3036" fill-opacity="0.11"/>
+  <rect x="33" y="154" width="90" height="6" rx="2" fill="#2b3036" fill-opacity="0.11"/>
+  <rect x="33" y="170" width="62" height="6" rx="2" fill="#2b3036" fill-opacity="0.11"/>
+
+  <!-- Datums-Stempel -->
+  <rect x="33" y="200" width="48" height="4" rx="1.5" fill="#5c626a" fill-opacity="0.28"/>
+
+  <!-- Buchrücken / Spiralbindung -->
+  <rect x="129" y="3" width="22" height="214" rx="2" fill="#333a45" fill-opacity="0.065" stroke="#333a45" stroke-opacity="0.09" stroke-width="0.6"/>
+  <!-- Spiralringe -->
+  <g fill="none" stroke="#333a45" stroke-opacity="0.2" stroke-width="1">
+    <circle cx="140" cy="26"  r="4.5"/>
+    <circle cx="140" cy="52"  r="4.5"/>
+    <circle cx="140" cy="78"  r="4.5"/>
+    <circle cx="140" cy="104" r="4.5"/>
+    <circle cx="140" cy="130" r="4.5"/>
+    <circle cx="140" cy="156" r="4.5"/>
+    <circle cx="140" cy="182" r="4.5"/>
+    <circle cx="140" cy="208" r="4.5"/>
+  </g>
+  <!-- Spirale inner highlight -->
+  <line x1="134" y1="5" x2="134" y2="213" stroke="white" stroke-opacity="0.22" stroke-width="1.2"/>
+
+  <!-- Rechte Seite -->
+  <rect x="149" y="5" width="126" height="206" rx="3" fill="#fbfaf7" stroke="#2b3036" stroke-opacity="0.11" stroke-width="0.8"/>
+
+  <!-- Lineatur rechts -->
+  <g stroke="#2b3036" stroke-opacity="0.065" stroke-width="0.55">
+    <line x1="149" y1="38" x2="275" y2="38"/>
+    <line x1="149" y1="54" x2="275" y2="54"/>
+    <line x1="149" y1="70" x2="275" y2="70"/>
+    <line x1="149" y1="86" x2="275" y2="86"/>
+    <line x1="149" y1="102" x2="275" y2="102"/>
+    <line x1="149" y1="118" x2="275" y2="118"/>
+    <line x1="149" y1="134" x2="275" y2="134"/>
+    <line x1="149" y1="150" x2="275" y2="150"/>
+    <line x1="149" y1="166" x2="275" y2="166"/>
+    <line x1="149" y1="182" x2="275" y2="182"/>
+    <line x1="149" y1="198" x2="275" y2="198"/>
+  </g>
+
+  <!-- Rechte Seite: Abschnitts-Überschrift -->
+  <rect x="159" y="14" width="62" height="8" rx="2" fill="#2b3036" fill-opacity="0.55"/>
+
+  <!-- Balken-Diagramm (drei Hebel) -->
+  <!-- Baseline -->
+  <line x1="158" y1="108" x2="236" y2="108" stroke="#2b3036" stroke-opacity="0.14" stroke-width="0.7"/>
+
+  <!-- Motivation — hoch, Türkis -->
+  <rect x="163" y="58" width="21" height="50" rx="3" fill="#14b4be" fill-opacity="0.7"/>
+  <!-- Können — mittel, Türkis gedämpft -->
+  <rect x="192" y="76" width="21" height="32" rx="3" fill="#14b4be" fill-opacity="0.45"/>
+  <!-- Umfeld — niedrig, Handspur (schwächster Hebel) -->
+  <rect x="221" y="93" width="21" height="15" rx="3" fill="#fc551e" fill-opacity="0.5"/>
+
+  <!-- Balken-Beschriftungs-Striche -->
+  <rect x="162" y="113" width="22" height="3.5" rx="1" fill="#5c626a" fill-opacity="0.3"/>
+  <rect x="191" y="113" width="22" height="3.5" rx="1" fill="#5c626a" fill-opacity="0.3"/>
+  <rect x="220" y="113" width="22" height="3.5" rx="1" fill="#5c626a" fill-opacity="0.3"/>
+
+  <!-- Checkliste -->
+  <!-- Abschnitts-Kopf -->
+  <rect x="159" y="128" width="50" height="7" rx="2" fill="#2b3036" fill-opacity="0.5"/>
+
+  <!-- Item 1: erledigt -->
+  <circle cx="165" cy="148" r="5.5" fill="none" stroke="#14b4be" stroke-width="1.3"/>
+  <path d="M162 148 L164.5 151 L169.5 144" fill="none" stroke="#14b4be" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="176" y="144" width="72" height="6" rx="2" fill="#2b3036" fill-opacity="0.2"/>
+
+  <!-- Item 2: erledigt -->
+  <circle cx="165" cy="164" r="5.5" fill="none" stroke="#14b4be" stroke-width="1.3"/>
+  <path d="M162 164 L164.5 167 L169.5 160" fill="none" stroke="#14b4be" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="176" y="160" width="62" height="6" rx="2" fill="#2b3036" fill-opacity="0.2"/>
+
+  <!-- Item 3: offen, Handspur (in progress) -->
+  <circle cx="165" cy="180" r="5.5" fill="none" stroke="#fc551e" stroke-width="1.3"/>
+  <rect x="176" y="176" width="80" height="6" rx="2" fill="#2b3036" fill-opacity="0.28"/>
+
+  <!-- Item 4: pending -->
+  <circle cx="165" cy="196" r="5.5" fill="none" stroke="#2b3036" stroke-opacity="0.18" stroke-width="1" stroke-dasharray="2.5 2.5"/>
+  <rect x="176" y="192" width="56" height="6" rx="2" fill="#2b3036" fill-opacity="0.1"/>
+
+  <!-- Datumsstempel rechts -->
+  <rect x="159" y="202" width="42" height="3.5" rx="1" fill="#5c626a" fill-opacity="0.26"/>
+</svg>

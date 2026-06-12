@@ -1,13 +1,57 @@
 ---
-interface Props { href: string; title: string; description: string; datum: Date; status: string; }
-const { href, title, description, datum, status } = Astro.props;
+interface Props { href: string; title: string; description: string; datum: Date; status: string; screenshot?: string; }
+const { href, title, description, datum, status, screenshot } = Astro.props;
 const d = datum.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' });
 ---
 <a href={href} class="group flex items-center gap-5 rounded-[10px] border border-tinte/15 bg-karte p-5 transition-colors hover:border-lagune">
-  <div class="relative hidden h-24 w-36 shrink-0 rounded-lg bg-[#e9e6e0] sm:block" aria-hidden="true">
-    <span class="absolute left-2.5 top-2 text-[10px] text-grau">screenshot</span>
-    <svg class="absolute bottom-3 right-3" width="56" height="36" aria-hidden="true"><ellipse cx="28" cy="18" rx="25" ry="14" fill="none" stroke="#fc551e" stroke-width="3" transform="rotate(-3 28 18)" /></svg>
+
+  <!-- Screenshot-Slot: echtes Bild wenn vorhanden, sonst Browser-Mockup -->
+  <div class="relative hidden h-24 w-36 shrink-0 overflow-hidden rounded-lg sm:block" aria-hidden="true">
+    {screenshot
+      ? <img src={screenshot} alt="" class="h-full w-full object-cover" loading="lazy"/>
+      : (
+        <svg viewBox="0 0 144 96" width="144" height="96" xmlns="http://www.w3.org/2000/svg">
+          <!-- Hintergrund -->
+          <rect width="144" height="96" rx="6" fill="#e9e6e0"/>
+          <!-- Browser-Leiste -->
+          <rect x="0" y="0" width="144" height="22" rx="6" fill="#d9d5cd"/>
+          <rect x="0" y="16" width="144" height="6" fill="#d9d5cd"/>
+          <!-- Ampel-Punkte -->
+          <circle cx="12"  cy="11" r="3.5" fill="#e06c5a"/>
+          <circle cx="22"  cy="11" r="3.5" fill="#e0b35a"/>
+          <circle cx="32"  cy="11" r="3.5" fill="#5ac07a"/>
+          <!-- URL-Bar -->
+          <rect x="44" y="6" width="78" height="10" rx="5" fill="#fbfaf7" fill-opacity="0.65"/>
+          <rect x="50" y="9.5" width="50" height="3.5" rx="1.5" fill="#2b3036" fill-opacity="0.18"/>
+
+          <!-- Linke Sidebar -->
+          <rect x="4" y="27" width="22" height="64" rx="2" fill="white" fill-opacity="0.35"/>
+          <rect x="7" y="31" width="16" height="3" rx="1" fill="#2b3036" fill-opacity="0.15"/>
+          <rect x="7" y="38" width="16" height="3" rx="1" fill="#2b3036" fill-opacity="0.15"/>
+          <rect x="7" y="45" width="16" height="3" rx="1" fill="#14b4be" fill-opacity="0.45"/>
+          <rect x="7" y="52" width="16" height="3" rx="1" fill="#2b3036" fill-opacity="0.15"/>
+          <rect x="7" y="59" width="12" height="3" rx="1" fill="#2b3036" fill-opacity="0.15"/>
+
+          <!-- Haupt-Inhaltsbereich -->
+          <rect x="31" y="29" width="108" height="7" rx="2" fill="#2b3036" fill-opacity="0.2"/>
+          <rect x="31" y="40" width="80" height="4.5" rx="1.5" fill="#2b3036" fill-opacity="0.11"/>
+          <rect x="31" y="49" width="94" height="4.5" rx="1.5" fill="#2b3036" fill-opacity="0.11"/>
+
+          <!-- Türkis-Aktions-Button -->
+          <rect x="31" y="59" width="46" height="14" rx="3" fill="#14b4be" fill-opacity="0.28"/>
+          <rect x="37" y="63.5" width="34" height="4" rx="1.5" fill="#14b4be" fill-opacity="0.65"/>
+
+          <!-- Status-Chip -->
+          <rect x="83" y="59" width="56" height="14" rx="3" fill="white" fill-opacity="0.5" stroke="#2b3036" stroke-opacity="0.1" stroke-width="0.5"/>
+          <rect x="87" y="63.5" width="36" height="4" rx="1.5" fill="#2b3036" fill-opacity="0.18"/>
+
+          <!-- Handspur-Ellipse (Designsystem-Element) -->
+          <ellipse cx="116" cy="80" rx="20" ry="10" fill="none" stroke="#fc551e" stroke-width="2.2" transform="rotate(-6 116 80)"/>
+        </svg>
+      )
+    }
   </div>
+
   <div>
     <span class="text-[11.5px] font-bold uppercase tracking-wide text-grau">{status}</span>
     <p class="mt-1 font-bold leading-snug group-hover:underline">{title}</p>
